@@ -1,0 +1,236 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* light "sky" surfaces (named ink-* for compatibility across the app) */
+  --color-ink: #e9f5ff;
+  --color-ink-2: #f3faff;
+  --color-ink-3: #ffffff;
+  --color-surface: #ffffff;
+
+  /* bright sky accents */
+  --color-sky-glow: #38bdf8;
+  --color-sky-deep: #0284c7;
+  --color-sun: #0ea5e9;    /* primary bright-blue accent */
+  --color-coral: #0284c7;  /* deeper blue for gradients */
+  --color-ember: #06b6d4;  /* cyan pop */
+
+  /* text */
+  --color-mist: #5b6c87;   /* muted body text */
+  --color-cloud: #243a5e;  /* primary readable text */
+  --color-deep: #0b2545;   /* strongest headings/emphasis */
+}
+
+/* ---------- Base ---------- */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  background: linear-gradient(180deg, #bfe6ff 0%, #ddf1ff 38%, #f4fbff 100%);
+  background-attachment: fixed;
+  background-color: #e9f5ff;
+  color: #243a5e;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin: 0;
+  color: #0b2545;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: #38bdf8;
+  color: #ffffff;
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar { width: 11px; }
+::-webkit-scrollbar-track { background: #dcefff; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #0ea5e9, #38bdf8);
+  border-radius: 99px;
+  border: 3px solid #dcefff;
+}
+
+/* ---------- Reusable utilities ---------- */
+.container-x {
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+.text-gradient-sun {
+  background: linear-gradient(100deg, #0284c7 0%, #0ea5e9 45%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-gradient-sky {
+  background: linear-gradient(100deg, #0ea5e9 0%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* glass card — frosted white on bright sky */
+.glass {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.72));
+  border: 1px solid rgba(11, 37, 69, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 14px 38px -22px rgba(3, 76, 150, 0.32);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(11, 37, 69, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 24px 60px -28px rgba(3, 76, 150, 0.4);
+}
+
+/* glowing CTA — bright sky blue */
+.btn-sun {
+  background: linear-gradient(100deg, #0284c7, #0ea5e9 50%, #38bdf8);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 10px 30px -8px rgba(14, 165, 233, 0.55);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+.btn-sun:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 42px -8px rgba(14, 165, 233, 0.7);
+  filter: brightness(1.05);
+}
+
+.btn-ghost {
+  border: 1px solid rgba(11, 37, 69, 0.18);
+  color: #0b2545;
+  transition: all 0.25s ease;
+  background: rgba(255, 255, 255, 0.55);
+}
+.btn-ghost:hover {
+  border-color: rgba(14, 165, 233, 0.6);
+  background: rgba(14, 165, 233, 0.1);
+  transform: translateY(-2px);
+}
+
+/* section eyebrow */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-sun);
+}
+
+/* aurora / mesh background */
+.mesh-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.mesh-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.4;
+  will-change: transform;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, -30px) scale(1.08); }
+}
+@keyframes float-slow-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-50px, 40px) scale(1.12); }
+}
+.animate-float { animation: float-slow 14s ease-in-out infinite; }
+.animate-float-2 { animation: float-slow-2 18s ease-in-out infinite; }
+
+/* grain overlay */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* marching route dots on the travel hero */
+@keyframes routedash {
+  to { stroke-dashoffset: -32; }
+}
+
+/* freefall speed streaks */
+@keyframes streakfall {
+  0% { transform: translateY(-40vh); }
+  100% { transform: translateY(115vh); }
+}
+
+/* marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 32s linear infinite;
+}
+
+/* subtle divider */
+.hairline {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(11, 37, 69, 0.14), transparent);
+}
+
+/* image fallback gradient — soft sky */
+.img-fallback {
+  background: linear-gradient(145deg, #dbeeff, #bfe3ff 55%, #9fd4ff);
+}
+
+/* hover-lift card */
+.lift {
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 26px 60px -26px rgba(3, 76, 150, 0.4);
+  border-color: rgba(14, 165, 233, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float, .animate-float-2, .animate-marquee { animation: none; }
+  html { scroll-behavior: auto; }
+}
